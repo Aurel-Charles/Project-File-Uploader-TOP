@@ -11,3 +11,18 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String  
+  expiresAt   DateTime
+}
+
+model User { 
+  id    Int     @id @default(autoincrement()) 
+  firstname String
+  lastname String
+  email String  @unique
+  password String
+} 

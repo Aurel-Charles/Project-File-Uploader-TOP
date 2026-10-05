@@ -10,9 +10,16 @@ express-session poir la gestion de cookie de session et de session id cote serve
 npm install express-session
 
 passport, pour l'authentification
+$ npm install passport
+
 passport-local, pour la strategey de l'authentification
 $ npm install passport-local
+
+password : 
+npm install bcryptjs
 
 prisma :
 npm install prisma@prev @types/pg --save-dev
 npm install @prisma/client@7 @prisma/adapter-pg pg dotenv
+
+$ npm install @quixo3/prisma-session-store express-session
