@@ -23,3 +23,13 @@ npm install prisma@prev @types/pg --save-dev
 npm install @prisma/client@7 @prisma/adapter-pg pg dotenv
 
 $ npm install @quixo3/prisma-session-store express-session
+
+---
+
+auth route :   
+
+route/authRouter : 
+
+- sign-up 
+- login
+

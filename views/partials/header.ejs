@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= locals.title ?? 'File Uploader' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script type="module" defer src="/js/script.js"></script>
+</head>
+<body>
+  <header>
+    <a href="/">File Uploader</a>
+    <nav>
+      <% if (locals.currentUser) { %>
+        <span>Hello <%= currentUser.firstname %></span>
+        <a href="/messages/new">New message</a>
+        <% if (currentUser.is_member) { %>
+          <span>(member)</span>
+        <% } else { %>
+          <a href="/join-club">Join the club</a>
+        <% } %>
+        <% if (currentUser.is_member && !currentUser.is_admin) { %>
+          <a href="/become-admin">Become admin</a>
+        <% } %>
+        <form action="/log-out" method="POST">
+          <button type="submit">Log out</button>
+        </form>
+      <% } else { %>
+        <a href="/log-in">Log in</a>
+        <a href="/sign-up">Sign up</a>
+      <% } %>
+    </nav>
+  </header>
+  <main>
