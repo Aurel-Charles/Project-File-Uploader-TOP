@@ -1,10 +1,18 @@
 import { prisma } from "../lib/prisma.js";
+import { supabase } from "../lib/supabase.js";
 import { HttpError } from "../middleware/httpErrorHandler.js";
+import { randomUUID } from "node:crypto";
 
-
-export async function postFiles(req, res) {
+export async function postFiles(req, res,next) {
     const { originalname, path, mimetype, size } = req.file;
     const folderId = res.locals.folder?.id ?? null;
+    const storagePath = `${req.user.id}/${randomUUID()}`
+
+    const uploadToSupabase = await supabase.storage.from(process.env.SUPABASE_BUCKET).upload(storagePath, req.file.buffer,{contentType: mimetype})
+
+    if ( uploadToSupabase.error) {
+        return next(new HttpError(uploadToSupabase.error.message, 502))
+    }
 
     await prisma.file.create({
         data: {
@@ -12,7 +20,7 @@ export async function postFiles(req, res) {
             folderId: folderId,
             mimeType: mimetype,
             originalName: originalname,
-            path: path,
+            path: storagePath,
             size: size,
         },
     });
@@ -27,13 +35,19 @@ export async function getFileById(req, res, next) {
     res.render('files/show', {file})
 }
 
-export function getDownload(req, res, next) {
+export async function getDownload(req, res, next) {
     const {path, originalName } = res.locals.file
-    res.download(path, originalName, (error)=> {
-        if (error) {
-            next(new HttpError('Can\'t find the file', 404))
-        }
-    })
+
+    const { data, error } = await supabase
+    .storage
+    .from(process.env.SUPABASE_BUCKET)
+    .createSignedUrl(`${path}`, 60, {download: originalName})
+
+    if (error) {
+        return next(new HttpError(error.message, 502))
+    }
+
+    res.redirect(data.signedUrl)
 }
 
 export async function postDelete(req, res, next) {
@@ -43,6 +57,16 @@ export async function postDelete(req, res, next) {
             id: file.id
         }
     })
+
+    const {error } = await supabase
+    .storage
+    .from(process.env.SUPABASE_BUCKET)
+    .remove(`${[file.path]}`)
+
+    if (error) {
+        console.log(error);
+    }
+
     const pathRedirection = file.folderId ? `/folders/${file.folderId}` : '/folders'
     res.redirect(pathRedirection)
 }
