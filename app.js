@@ -1,12 +1,14 @@
 import "dotenv/config";
 import express from 'express'
 import { logger } from "./middleware/logger.js";
-import { prisma } from "./lib/prisma.js";
 import { authRouter } from "./routes/authRouter.js";
 import expressSession from 'express-session';
 import { sessionConfig } from "./config/session.js";
 import passport from "passport";
 import './config/passport.js'
+import { filesRouter } from "./routes/filesRouter.js";
+import { indexRouter } from "./routes/indexRouter.js";
+import { foldersRouter } from "./routes/foldersRouter.js";
 
 
 const app = express()
@@ -25,7 +27,6 @@ app.use(passport.session())
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
-  console.log(res.locals.currentUser);
   next();
 });
 
@@ -33,19 +34,20 @@ app.use((req, res, next) => {
 
 
 app.use(logger)
+app.use('/', indexRouter)
 app.use('/', authRouter)
-
-app.get('/', async (req, res)=> {
-    const allUsers = await prisma.user.findMany()
-    console.log(allUsers);
-    
-    res.render('index')
-  })
+app.use('/folders', foldersRouter)
+app.use('/files', filesRouter)
 
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+  const status = err.statusCode || 500;
+  if (status >= 500) console.error(err);
+  const isProd = process.env.NODE_ENV === 'production';
+  res.status(status).render('error', {
+    status,
+    message: isProd && status >= 500 ? 'Something went wrong.' : err.message,
   });
+});
 
 app.listen(PORT, (error)=> {
     if (error) {

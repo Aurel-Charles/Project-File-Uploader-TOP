@@ -13,15 +13,7 @@
     <nav>
       <% if (locals.currentUser) { %>
         <span>Hello <%= currentUser.firstname %></span>
-        <a href="/messages/new">New message</a>
-        <% if (currentUser.is_member) { %>
-          <span>(member)</span>
-        <% } else { %>
-          <a href="/join-club">Join the club</a>
-        <% } %>
-        <% if (currentUser.is_member && !currentUser.is_admin) { %>
-          <a href="/become-admin">Become admin</a>
-        <% } %>
+        <a href="/files/new">Upload A File</a>
         <form action="/log-out" method="POST">
           <button type="submit">Log out</button>
         </form>
