@@ -22,3 +22,19 @@ export async function isOwner(req, res, next) {
         res.locals.folder = folder
         next()
 } 
+
+export async function isFileOwner(req, res, next) {
+    const id = Number(req.params.id)
+    if (!Number.isInteger(id)) {
+        throw new HttpError('Can\'t find file!', 404)
+    }
+
+    const file = await prisma.file.findUnique({
+        where: {id : id, ownerId : req.user.id}
+    })
+    if (file === null) {
+        throw new HttpError('Can\'t find file!', 404)
+    }
+    res.locals.file = file
+    next()
+}

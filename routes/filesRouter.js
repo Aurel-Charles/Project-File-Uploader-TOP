@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { isAuth } from "../middleware/authCheck.js";
-import { postFiles } from "../controllers/filesController.js";
+import { isAuth, isFileOwner } from "../middleware/authCheck.js";
+import { getDownload, getFileById, postFiles } from "../controllers/filesController.js";
 import { upload } from "../config/upload.js";
 
 
@@ -8,5 +8,8 @@ import { upload } from "../config/upload.js";
 export const filesRouter = Router()
 
 filesRouter.use(isAuth)
+filesRouter.param('id', isFileOwner)
 
 filesRouter.post('/',upload.single('file'), postFiles)
+filesRouter.get('/:id', getFileById)
+filesRouter.get('/:id/download', getDownload)

@@ -1,0 +1,35 @@
+<%- include('../partials/header', { title: file.originalName }) %>
+
+<h1><%= file.originalName %></h1>
+
+<%
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+%>
+
+<dl class="file-details">
+  <dt>Name</dt>
+  <dd><%= file.originalName %></dd>
+
+  <dt>Size</dt>
+  <dd><%= formatSize(file.size) %></dd>
+
+  <dt>Type</dt>
+  <dd><%= file.mimeType %></dd>
+
+  <dt>Uploaded</dt>
+  <dd><%= file.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></dd>
+</dl>
+
+<a href="/files/<%= file.id %>/download">Download</a>
+
+<form action="/files/<%= file.id %>/delete" method="POST">
+  <button type="submit">Delete</button>
+</form>
+
+<a href="<%= file.folderId ? `/folders/${file.folderId}` : '/folders' %>">Back</a>
+
+<%- include('../partials/footer') %>

@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js";
+import { HttpError } from "../middleware/httpErrorHandler.js";
 
 
 export async function postFiles(req, res) {
@@ -17,4 +18,20 @@ export async function postFiles(req, res) {
     });
 
     res.redirect(folderId ? `/folders/${folderId}` : '/folders');
+}
+
+export async function getFileById(req, res, next) {
+    const file = res.locals.file
+    console.log(file);
+    
+    res.render('files/show', {file})
+}
+
+export function getDownload(req, res, next) {
+    const {path, originalName } = res.locals.file
+    res.download(path, originalName, (error)=> {
+        if (error) {
+            next(new HttpError('Can\'t find the file', 404))
+        }
+    })
 }
