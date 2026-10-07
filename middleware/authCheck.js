@@ -9,21 +9,16 @@ export function isAuth(req, res, next) {
 }
 
 export async function isOwner(req, res, next) {
-    try {
         const id = Number(req.params.id)
         if (!Number.isInteger(id)) {
-            return next(new HttpError('Can\'t find folder!', 404))
+            throw new HttpError('Can\'t find folder!', 404)
         }
         const folder = await prisma.folder.findUnique({
             where: {id : id , ownerId : req.user.id}
         })
         if (folder === null) {
-            return next(new HttpError('Can\'t find folder!', 404))
+            throw new HttpError('Can\'t find folder!', 404)
         }
         res.locals.folder = folder
         next()
-
-    } catch (error) {
-        next(error)
-    }
 } 

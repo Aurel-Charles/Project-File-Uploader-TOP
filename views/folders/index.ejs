@@ -1,0 +1,47 @@
+<%- include('../partials/header', { title: 'Cloud Drive' }) %>
+
+<h1>Cloud Drive</h1>
+
+<a href="/folders/new">Add Folder</a>
+
+<form action="/files" method="POST" enctype="multipart/form-data">
+  <input type="file" name="file" required>
+  <button type="submit">Upload</button>
+</form>
+
+<% if (!folders.length) { %>
+  <p>No folders yet.</p>
+<% } %>
+
+<ul class="folders">
+  <% folders.forEach(folder => { %>
+    <li class="folder">
+      <h2>
+        <a href="/folders/<%= folder.id %>"><%= folder.name %></a>
+      </h2>
+      <p><%= folder.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
+
+      <a href="/folders/<%= folder.id %>/edit">Edit</a>
+      <form action="/folders/<%= folder.id %>/delete" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<ul class="files">
+  <% files.forEach(file => { %>
+    <li class="file">
+      <h2>
+        <a href="/files/<%= file.id %>"><%= file.originalName %></a>
+      </h2>
+      <p><%= file.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
+
+      <form action="/files/<%= file.id %>/delete" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('../partials/footer') %>

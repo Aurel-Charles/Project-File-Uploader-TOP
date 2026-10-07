@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title: folder.name }) %>
+
+<h1><%= folder.name %></h1>
+
+<% if (locals.errors?.length) { %>
+  <ul class="errors">
+    <% errors.forEach(err => { %>
+      <li><%= err.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<form action="/folders/<%= folder.id %>/files" method="POST" enctype="multipart/form-data">
+  <input type="file" name="file" required>
+  <button type="submit">Upload</button>
+</form>
+
+<% if (!files.length) { %>
+  <p>This folder is empty.</p>
+<% } %>
+
+<ul class="files">
+  <% files.forEach(file => { %>
+    <li class="file">
+      <h2>
+        <a href="/files/<%= file.id %>"><%= file.originalName %></a>
+      </h2>
+      <p><%= file.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
+
+      <form action="/files/<%= file.id %>/delete" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<a href="/folders">Back</a>
+
+<%- include('../partials/footer') %>

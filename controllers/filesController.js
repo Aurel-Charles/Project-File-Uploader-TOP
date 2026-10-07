@@ -1,16 +1,20 @@
 import { prisma } from "../lib/prisma.js";
 
-export function getFilesNew(req, res) {
-    res.render('files/new')
-}
 
-export async function postFiles(req,res,next) {
-    console.log(req.file);
-    console.log(req.user);
+export async function postFiles(req, res) {
+    const { originalname, path, mimetype, size } = req.file;
+    const folderId = res.locals.folder?.id ?? null;
 
-    // const user = await prisma.user.findUnique(
-    //     {where : {email : email}})
-    // console.log(user);
-    
-    res.redirect('/')
+    await prisma.file.create({
+        data: {
+            ownerId: req.user.id,
+            folderId: folderId,
+            mimeType: mimetype,
+            originalName: originalname,
+            path: path,
+            size: size,
+        },
+    });
+
+    res.redirect(folderId ? `/folders/${folderId}` : '/folders');
 }

@@ -1,0 +1,22 @@
+<%- include('../partials/header', { title: 'Edit folder' }) %>
+
+<h1>Edit folder</h1>
+
+<% if (locals.errors?.length) { %>
+  <ul class="errors">
+    <% errors.forEach(err => { %>
+      <li><%= err.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<form action="/folders/<%= folder.id %>/update" method="POST">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" value="<%= locals.values?.name ?? folder.name%>" required>
+
+    <button type="submit">Update</button>
+</form>
+
+<a href="/folders/<%= folder.id %>/">cancel</a>
+
+<%- include('../partials/footer') %>

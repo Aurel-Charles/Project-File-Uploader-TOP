@@ -1,0 +1,22 @@
+<%- include('../partials/header', { title: 'Create a new folder' }) %>
+
+<h1>Create a new folder</h1>
+
+<% if (locals.errors?.length) { %>
+  <ul class="errors">
+    <% errors.forEach(err => { %>
+      <li><%= err.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<form action="/folders" method="POST">
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" %>" required>
+
+    <button type="submit">Create</button>
+</form>
+
+<a href="/folders/">cancel</a>
+
+<%- include('../partials/footer') %>
