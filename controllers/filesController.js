@@ -35,3 +35,14 @@ export function getDownload(req, res, next) {
         }
     })
 }
+
+export async function postDelete(req, res, next) {
+    const {file} = res.locals
+    await prisma.file.delete({
+        where: {
+            id: file.id
+        }
+    })
+    const pathRedirection = file.folderId ? `/folders/${file.folderId}` : '/folders'
+    res.redirect(pathRedirection)
+}
