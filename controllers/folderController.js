@@ -1,5 +1,6 @@
 import { body, validationResult } from "express-validator";
 import { prisma } from "../lib/prisma.js";
+import { supabase } from "../lib/supabase.js";
 
 export async function getIndexFolder(req,res, next) {
     const id = req.user.id
@@ -77,9 +78,28 @@ export async function postUpdateFolder(req, res, next) {
 }
 
 export async function postDeleteFolder(req, res, next) {
-    const id = res.locals.folder.id
-    await prisma.folder.delete({
-        where: {id : id}
-    })
+    const folderId = res.locals.folder.id
+    
+    const [fileDeleted] = await prisma.$transaction(
+        [
+          prisma.file.findMany({ where: { folderId: folderId }, select : {path: true} }),
+          prisma.folder.delete({where: {id : folderId}})
+        ],
+        { isolationLevel: "RepeatableRead" }
+      );
+
+      const paths = fileDeleted.map(file=>file.path)
+    
+    if (paths.length !== 0) {
+        const {error } = await supabase
+        .storage
+        .from(process.env.SUPABASE_BUCKET)
+        .remove(paths)
+    
+        if (error) {
+            console.log(error);
+        }
+    }
+
     res.redirect('/folders')
 }
