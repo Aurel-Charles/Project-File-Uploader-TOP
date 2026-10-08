@@ -9,6 +9,7 @@ import './config/passport.js'
 import { filesRouter } from "./routes/filesRouter.js";
 import { indexRouter } from "./routes/indexRouter.js";
 import { foldersRouter } from "./routes/foldersRouter.js";
+import multer from "multer";
 
 
 const app = express()
@@ -40,7 +41,10 @@ app.use('/folders', foldersRouter)
 app.use('/files', filesRouter)
 
 app.use((err, req, res, next) => {
-  const status = err.statusCode || 500;
+  let status = err.statusCode || 500;
+  if (err instanceof multer.MulterError) {
+    status = err.code === 'LIMIT_FILE_SIZE' ? 413 : 400;
+  }
   if (status >= 500) console.error(err);
   const isProd = process.env.NODE_ENV === 'production';
   res.status(status).render('error', {
