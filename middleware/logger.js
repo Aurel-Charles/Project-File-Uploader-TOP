@@ -3,5 +3,7 @@ export function logger(req, res, next) {
     const method = req.method  
     const url = req.url  
     console.log(`${date.toJSON()} - ${method}: ${url}`);
+    console.log(res.locals);
+    
     next()
 }

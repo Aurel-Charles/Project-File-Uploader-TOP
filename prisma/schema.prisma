@@ -36,6 +36,7 @@ model Folder {
   ownerId   Int
   owner     User     @relation(fields: [ownerId], references: [id])
   files     File[]
+  shares    Share[]
 }
 
 model File {
@@ -49,4 +50,12 @@ model File {
   owner        User     @relation(fields: [ownerId], references: [id])
   folderId     Int?
   folder       Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
+}
+
+model Share {
+  id        String   @id @default(uuid())
+  folderId  Int
+  folder    Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }

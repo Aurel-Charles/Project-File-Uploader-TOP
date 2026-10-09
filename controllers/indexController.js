@@ -1,7 +1,7 @@
 
 export function getIndex(req, res) {
     if (req.isAuthenticated()) {
-       return res.render('index')
+       return res.redirect('/folders')
     }
     res.redirect('/log-in')
 }

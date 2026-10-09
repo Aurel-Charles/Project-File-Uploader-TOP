@@ -5,21 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= locals.title ?? 'File Uploader' %></title>
   <link rel="stylesheet" href="/css/style.css">
+  <script defer src="/vendor/lucide/lucide.min.js"></script>
   <script type="module" defer src="/js/script.js"></script>
 </head>
 <body>
   <header>
-    <a href="/">File Uploader</a>
+    <a href="/"><i data-lucide="hard-drive" aria-hidden="true"></i>File Uploader</a>
     <nav>
       <% if (locals.currentUser) { %>
         <span>Hello <%= currentUser.firstname %></span>
-        <a href="/files/new">Upload A File</a>
+        <a href="/folders"><i data-lucide="folder" aria-hidden="true"></i>My drive</a>
         <form action="/log-out" method="POST">
-          <button type="submit">Log out</button>
+          <button type="submit"><i data-lucide="log-out" aria-hidden="true"></i>Log out</button>
         </form>
       <% } else { %>
-        <a href="/log-in">Log in</a>
-        <a href="/sign-up">Sign up</a>
+        <a href="/log-in"><i data-lucide="log-in" aria-hidden="true"></i>Log in</a>
+        <a href="/sign-up"><i data-lucide="user-plus" aria-hidden="true"></i>Sign up</a>
       <% } %>
     </nav>
   </header>

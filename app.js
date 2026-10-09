@@ -10,12 +10,18 @@ import { filesRouter } from "./routes/filesRouter.js";
 import { indexRouter } from "./routes/indexRouter.js";
 import { foldersRouter } from "./routes/foldersRouter.js";
 import multer from "multer";
+import { shareRouter } from "./routes/shareRouter.js";
+import { formatSize } from "./utils/formatSize.js";
 
 
 const app = express()
 const PORT = process.env.PORT || 3000;
 
+// utils functionfor all views to use
+app.locals.formatSize = formatSize;
+
 app.use(express.static('public'));
+app.use('/vendor/lucide', express.static('node_modules/lucide/dist/umd'));
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
@@ -39,6 +45,7 @@ app.use('/', indexRouter)
 app.use('/', authRouter)
 app.use('/folders', foldersRouter)
 app.use('/files', filesRouter)
+app.use('/share', shareRouter)
 
 app.use((err, req, res, next) => {
   let status = err.statusCode || 500;

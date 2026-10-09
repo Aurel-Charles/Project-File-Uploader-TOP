@@ -61,7 +61,7 @@ export async function postDelete(req, res, next) {
     const {error } = await supabase
     .storage
     .from(process.env.SUPABASE_BUCKET)
-    .remove(`${[file.path]}`)
+    .remove([file.path])
 
     if (error) {
         console.log(error);

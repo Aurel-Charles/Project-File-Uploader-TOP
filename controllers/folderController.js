@@ -1,6 +1,7 @@
 import { body, validationResult } from "express-validator";
 import { prisma } from "../lib/prisma.js";
 import { supabase } from "../lib/supabase.js";
+import { HttpError } from "../middleware/httpErrorHandler.js";
 
 export async function getIndexFolder(req,res, next) {
     const id = req.user.id
@@ -46,14 +47,32 @@ export async function postFolder(req, res, next) {
 
 export async function getFolderById(req, res, next) {
     const {folder} = res.locals
-    const files = await prisma.file.findMany({
-        where : {
-            ownerId : req.user.id,
-            folderId : folder.id, 
-        },
-        orderBy : {createdAt : "desc"}
-    })
-    res.render('folders/show', { folder, files })
+    const date = new Date()
+
+    const [files, shares] = await Promise.all(
+        [
+            prisma.file.findMany({
+                where : {
+                    ownerId : req.user.id,
+                    folderId : folder.id, 
+                },
+                orderBy : {createdAt : "desc"}
+            }),
+            prisma.share.findMany({
+                where : {
+                    folderId : folder.id,
+                    expiresAt: { gt: date} 
+                },
+                orderBy : {createdAt : "desc"}
+            })
+        ]
+    )
+
+    const protocol = req.protocol 
+    const host = req.get('host') 
+    const urlBase = `${protocol}://${host}/`
+
+    res.render('folders/show', { folder, files, shares, urlBase})
 }
 
 export function getEditFolder(req,res,next) {
@@ -102,4 +121,48 @@ export async function postDeleteFolder(req, res, next) {
     }
 
     res.redirect('/folders')
+}
+
+
+export async function postShareLink(req, res, next) {
+    const createdAtInt = Date.now()
+    const duration = Number(req.body.duration)
+    const ALLOWED_DURATION = [1, 7, 30]
+    if (!ALLOWED_DURATION.includes(duration)) {
+        return next( new HttpError('Wrong duration', 400))
+    }
+    const expiresAtInt = createdAtInt + (duration * 24 * 60 * 60 * 1000)
+    const expiresAt = new Date(expiresAtInt)
+    
+    const folderId = res.locals.folder.id
+
+    const share = await prisma.share.create({
+        data: {
+            folderId : folderId,
+            expiresAt: expiresAt
+        }
+    })
+    console.log(share);
+    
+    res.redirect(`/folders/${folderId}`)
+}
+
+
+
+export async function postDeleteShare(req, res) {
+    const folderId = res.locals.folder.id;
+    const { shareId } = req.params;
+
+    const { count } = await prisma.share.deleteMany({
+        where: {
+            id: shareId,
+            folderId: folderId,
+        },
+    });
+
+    if (count === 0) {
+        throw new HttpError("Share link not found", 404);
+    }
+
+    res.redirect(`/folders/${folderId}`);
 }

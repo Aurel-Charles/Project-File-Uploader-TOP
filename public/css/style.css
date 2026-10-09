@@ -1,0 +1,523 @@
+/* 1. Use a more-intuitive box-sizing model */
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  /* 2. Remove default margin */
+  *:not(dialog) {
+    margin: 0;
+  }
+  
+  /* 3. Enable keyword animations */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      interpolate-size: allow-keywords;
+    }
+  }
+  
+  body {
+    /* 4. Increase line-height */
+    line-height: 1.5;
+    /* 5. Improve text rendering */
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* 6. Improve media defaults */
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+  }
+  
+  /* 7. Inherit fonts for form controls */
+  input, button, textarea, select {
+    font: inherit;
+  }
+  
+  /* 8. Avoid text overflows */
+  p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+  }
+  
+  /* 9. Improve line wrapping */
+  p {
+    text-wrap: pretty;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+  
+  /*
+    10. Create a root stacking context
+  */
+  #root, #__next {
+    isolation: isolate;
+  }
+
+
+
+/* ==========================================================
+   File Uploader — thème
+   ========================================================== */
+
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #eef0f4;
+  --border: #dde1e8;
+  --text: #1c2230;
+  --muted: #667085;
+  --accent: #2f6fed;
+  --accent-hover: #2459c7;
+  --accent-soft: #e8f0fe;
+  --danger: #c4372f;
+  --danger-soft: #fdecea;
+  --radius: 10px;
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.06), 0 1px 3px rgb(16 24 40 / 0.08);
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12151b;
+    --surface: #1b1f27;
+    --surface-2: #232834;
+    --border: #2e3442;
+    --text: #e6e9ef;
+    --muted: #98a1b3;
+    --accent: #6c9cff;
+    --accent-hover: #8db2ff;
+    --accent-soft: #1f2a44;
+    --danger: #f07167;
+    --danger-soft: #3a1f1f;
+    --shadow: none;
+    color-scheme: dark;
+  }
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+/* ---------- Header ---------- */
+
+body > header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.75rem clamp(1rem, 4vw, 2rem);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+body > header > a {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+body > header > a:hover { text-decoration: none; }
+
+body > header nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+body > header nav span { color: var(--muted); }
+
+/* ---------- Icônes Lucide ---------- */
+
+svg.lucide {
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+}
+
+svg.lucide[hidden] { display: none; }
+
+/* Liens avec une icône : icône et texte alignés */
+a:has(> svg.lucide) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+body > header > a svg.lucide {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--accent);
+}
+
+.file h2 svg.lucide { color: var(--muted); }
+
+/* ---------- Main ---------- */
+
+.folder-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.folder-title svg {
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+  color: var(--accent);
+}
+
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+  padding: 2rem clamp(1rem, 4vw, 2rem) 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+h1 {
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  line-height: 1.2;
+}
+
+main > h2 {
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+main > p { color: var(--muted); }
+
+/* ---------- Boutons et champs ---------- */
+
+button,
+a[href="/folders/new"],
+a[href$="/download"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+button:hover,
+a[href="/folders/new"]:hover,
+a[href$="/download"]:hover {
+  background: var(--accent-hover);
+  text-decoration: none;
+}
+
+a[href="/folders/new"] { align-self: flex-start; }
+
+/* Boutons secondaires : déconnexion */
+form[action="/log-out"] button {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+form[action="/log-out"] button:hover { background: var(--surface-2); }
+
+/* Boutons de suppression */
+form[action$="/delete"] button {
+  background: transparent;
+  color: var(--danger);
+  border-color: transparent;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.9rem;
+}
+form[action$="/delete"] button:hover { background: var(--danger-soft); }
+
+input,
+select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+input:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Formulaires classiques (connexion, inscription, dossier) */
+main > form:not([enctype]):not([action$="/share"]):not([action$="/delete"]) {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 420px;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+main > form:not([enctype]):not([action$="/share"]):not([action$="/delete"]) label:not(:first-child) {
+  margin-top: 0.5rem;
+}
+main > form:not([enctype]):not([action$="/share"]):not([action$="/delete"]) button {
+  margin-top: 1rem;
+}
+
+/* Formulaire d'upload : zone en pointillés */
+form[enctype="multipart/form-data"] {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+form[enctype="multipart/form-data"] input[type="file"] {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: var(--muted);
+}
+input[type="file"]::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Formulaire de partage */
+form[action$="/share"] {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+form[action$="/share"] select { width: auto; }
+
+/* ---------- Messages d'erreur ---------- */
+
+.errors {
+  list-style: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-weight: 500;
+  max-width: 420px;
+}
+
+/* ---------- Grille des dossiers ---------- */
+
+.folders {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.folder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s;
+}
+.folder:hover { border-color: var(--accent); }
+
+.folder h2,
+.folder p { flex-basis: 100%; }
+
+.folder h2 { font-size: 1rem; }
+.folder h2 a {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.folder h2 a svg {
+  flex-shrink: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--accent);
+}
+
+.folder p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.folder a[href$="/edit"] {
+  font-size: 0.9rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+}
+.folder a[href$="/edit"]:hover {
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+
+/* ---------- Liste des fichiers ---------- */
+
+.files {
+  list-style: none;
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.files:empty { display: none; }
+
+.file {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+}
+.file + .file { border-top: 1px solid var(--border); }
+.file:hover { background: var(--surface-2); }
+
+.file h2 {
+  flex: 1 1 200px;
+  min-width: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.file h2 a {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file p {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.file a[href$="/download"] {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+/* ---------- Liens de partage ---------- */
+
+.shares {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.shares:empty { display: none; }
+
+.share {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+}
+.share input {
+  flex: 1 1 260px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.85rem;
+}
+.share p {
+  flex-basis: 100%;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- Détails d'un fichier ---------- */
+
+.file-details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.6rem 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.file-details dt {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.file-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Footer ---------- */
+
+body > footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+}
+@media (prefers-color-scheme: dark) {
+  .footer-link img { filter: invert(1); }
+}

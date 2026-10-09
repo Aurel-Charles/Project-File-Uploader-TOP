@@ -1,14 +1,6 @@
 <%- include('../partials/header', { title: file.originalName }) %>
 
-<h1><%= file.originalName %></h1>
-
-<%
-  function formatSize(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  }
-%>
+<h1 class="folder-title"><i data-lucide="file" aria-hidden="true"></i><%= file.originalName %></h1>
 
 <dl class="file-details">
   <dt>Name</dt>
@@ -24,12 +16,12 @@
   <dd><%= file.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></dd>
 </dl>
 
-<a href="/files/<%= file.id %>/download">Download</a>
+<a href="/files/<%= file.id %>/download"><i data-lucide="download" aria-hidden="true"></i>Download</a>
 
 <form action="/files/<%= file.id %>/delete" method="POST">
-  <button type="submit">Delete</button>
+  <button type="submit"><i data-lucide="trash" aria-hidden="true"></i>Delete</button>
 </form>
 
-<a href="<%= file.folderId ? `/folders/${file.folderId}` : '/folders' %>">Back</a>
+<a href="<%= file.folderId ? `/folders/${file.folderId}` : '/folders' %>"><i data-lucide="arrow-left" aria-hidden="true"></i>Back</a>
 
 <%- include('../partials/footer') %>

@@ -1,0 +1,25 @@
+<%- include('../partials/header', { title: folder.name }) %>
+
+<h1 class="folder-title"><i data-lucide="folder-open" aria-hidden="true"></i><%= folder.name %></h1>
+
+<p>
+  Shared folder. This link expires
+  <%= share.expiresAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %>.
+</p>
+
+<% if (!folder.files.length) { %>
+  <p>This folder is empty.</p>
+<% } %>
+
+<ul class="files">
+  <% folder.files.forEach(file => { %>
+    <li class="file">
+      <h2><i data-lucide="file" aria-hidden="true"></i><%= file.originalName %></h2>
+      <a href="/share/<%= share.id %>/files/<%= file.id %>/download"><i data-lucide="download" aria-hidden="true"></i>Download</a>
+      <p><%= formatSize(file.size) %></p>
+      <p><%= file.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('../partials/footer') %>

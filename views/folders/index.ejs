@@ -2,11 +2,11 @@
 
 <h1>Cloud Drive</h1>
 
-<a href="/folders/new">Add Folder</a>
+<a href="/folders/new"><i data-lucide="folder-plus" aria-hidden="true"></i>Add folder</a>
 
 <form action="/files" method="POST" enctype="multipart/form-data">
   <input type="file" name="file" required>
-  <button type="submit">Upload</button>
+  <button type="submit"><i data-lucide="upload" aria-hidden="true"></i>Upload</button>
 </form>
 
 <% if (!folders.length) { %>
@@ -17,13 +17,13 @@
   <% folders.forEach(folder => { %>
     <li class="folder">
       <h2>
-        <a href="/folders/<%= folder.id %>"><%= folder.name %></a>
+        <a href="/folders/<%= folder.id %>"><i data-lucide="folder" aria-hidden="true"></i><%= folder.name %></a>
       </h2>
       <p><%= folder.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
 
-      <a href="/folders/<%= folder.id %>/edit">Edit</a>
+      <a href="/folders/<%= folder.id %>/edit"><i data-lucide="pencil" aria-hidden="true"></i>Edit</a>
       <form action="/folders/<%= folder.id %>/delete" method="POST">
-        <button type="submit">Delete</button>
+        <button type="submit"><i data-lucide="trash" aria-hidden="true"></i>Delete</button>
       </form>
     </li>
   <% }) %>
@@ -33,12 +33,12 @@
   <% files.forEach(file => { %>
     <li class="file">
       <h2>
-        <a href="/files/<%= file.id %>"><%= file.originalName %></a>
+        <a href="/files/<%= file.id %>"><i data-lucide="file" aria-hidden="true"></i><%= file.originalName %></a>
       </h2>
       <p><%= file.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
 
       <form action="/files/<%= file.id %>/delete" method="POST">
-        <button type="submit">Delete</button>
+        <button type="submit"><i data-lucide="trash" aria-hidden="true"></i>Delete</button>
       </form>
     </li>
   <% }) %>
