@@ -5,7 +5,10 @@ import  { prisma } from '../lib/prisma.js';
 
 export const sessionConfig = {
     cookie: {
-     maxAge: 7 * 24 * 60 * 60 * 1000 // ms
+     maxAge: 7 * 24 * 60 * 60 * 1000, // ms
+     httpOnly: true,
+     sameSite: 'lax',
+     secure: process.env.NODE_ENV === 'production',
     },
     secret: process.env.SESSION_SECRET,
     resave: false,
