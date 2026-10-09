@@ -4,11 +4,13 @@ A stripped-down personal cloud drive, inspired by Google Drive. Users can sign u
 
 Built as part of the [File Uploader project](https://www.theodinproject.com/lessons/nodejs-file-uploader) from **The Odin Project** Full Stack JavaScript curriculum.
 
-**Live demo:** [your-app.onrender.com](https://project-file-uploader-top.onrender.com/)
+ **[Live demo](https://project-file-uploader-top.onrender.com/)**
 
 > Hosted on Render's free tier: the server sleeps when idle, so the first visit may take a few seconds to wake it up.
 
 ---
+
+
 
 ## Features
 
@@ -20,25 +22,35 @@ Built as part of the [File Uploader project](https://www.theodinproject.com/less
 - **Folder sharing** (extra credit): generate a public link to a folder, valid for 1, 7 or 30 days. Anyone with the link can browse the folder and download its files without an account. Links can be copied in one click and revoked at any time.
 - **Ownership checks**: every folder, file and share route checks that the resource belongs to the logged-in user, and answers with a 404 otherwise.
 
+
+
 ## Tech stack
 
-| Layer | Tools |
-| --- | --- |
-| Server | Node.js, Express 5 |
-| Views | EJS, vanilla CSS (light and dark mode), Lucide icons |
-| Database | PostgreSQL, Prisma ORM 7 (with `@prisma/adapter-pg`) |
-| Auth | Passport.js, `passport-local`, `express-session`, `@quixo3/prisma-session-store`, bcryptjs |
-| Uploads | Multer (memory storage), Supabase Storage |
-| Validation | express-validator |
-| Hosting | Render (app), Supabase (database and storage) |
+
+| Layer      | Tools                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------ |
+| Server     | Node.js, Express 5                                                                         |
+| Views      | EJS, vanilla CSS (light and dark mode), Lucide icons                                       |
+| Database   | PostgreSQL, Prisma ORM 7 (with `@prisma/adapter-pg`)                                       |
+| Auth       | Passport.js, `passport-local`, `express-session`, `@quixo3/prisma-session-store`, bcryptjs |
+| Uploads    | Multer (memory storage), Supabase Storage                                                  |
+| Validation | express-validator                                                                          |
+| Hosting    | Render (app), Supabase (database and storage)                                              |
+
+
+
 
 ## Getting started
+
+
 
 ### Prerequisites
 
 - Node.js 20 or later
 - A local PostgreSQL database
 - A [Supabase](https://supabase.com) project with a **private** storage bucket
+
+
 
 ### Installation
 
@@ -70,6 +82,8 @@ The Supabase **secret** key is only used on the server. Never expose it in the b
 npx prisma migrate dev
 ```
 
+
+
 ### Run the app
 
 ```bash
@@ -94,27 +108,33 @@ Then open [http://localhost:3000](http://localhost:3000).
 └── views/              # EJS templates
 ```
 
+
+
 ## Routes
 
-| Method | Path | Description |
-| --- | --- | --- |
-| GET / POST | `/sign-up` | Sign-up form and account creation |
-| GET / POST | `/log-in` | Log-in form and authentication |
-| POST | `/log-out` | Log out and destroy the session |
-| GET | `/folders` | Root of the drive: folders and loose files |
-| GET / POST | `/folders/new`, `/folders` | Create a folder |
-| GET | `/folders/:id` | Folder content and its share links |
-| GET / POST | `/folders/:id/edit`, `/folders/:id/update` | Rename a folder |
-| POST | `/folders/:id/delete` | Delete a folder and its files |
-| POST | `/folders/:id/files` | Upload a file into a folder |
-| POST | `/folders/:id/share` | Create a share link |
-| POST | `/folders/:id/shares/:shareId/delete` | Revoke a share link |
-| POST | `/files` | Upload a file to the root |
-| GET | `/files/:id` | File details |
-| GET | `/files/:id/download` | Download a file (signed URL) |
-| POST | `/files/:id/delete` | Delete a file |
-| GET | `/share/:id` | Public view of a shared folder |
-| GET | `/share/:id/files/:fileId/download` | Public download of a shared file |
+
+| Method     | Path                                       | Description                                |
+| ---------- | ------------------------------------------ | ------------------------------------------ |
+| GET / POST | `/sign-up`                                 | Sign-up form and account creation          |
+| GET / POST | `/log-in`                                  | Log-in form and authentication             |
+| POST       | `/log-out`                                 | Log out and destroy the session            |
+| GET        | `/folders`                                 | Root of the drive: folders and loose files |
+| GET / POST | `/folders/new`, `/folders`                 | Create a folder                            |
+| GET        | `/folders/:id`                             | Folder content and its share links         |
+| GET / POST | `/folders/:id/edit`, `/folders/:id/update` | Rename a folder                            |
+| POST       | `/folders/:id/delete`                      | Delete a folder and its files              |
+| POST       | `/folders/:id/files`                       | Upload a file into a folder                |
+| POST       | `/folders/:id/share`                       | Create a share link                        |
+| POST       | `/folders/:id/shares/:shareId/delete`      | Revoke a share link                        |
+| POST       | `/files`                                   | Upload a file to the root                  |
+| GET        | `/files/:id`                               | File details                               |
+| GET        | `/files/:id/download`                      | Download a file (signed URL)               |
+| POST       | `/files/:id/delete`                        | Delete a file                              |
+| GET        | `/share/:id`                               | Public view of a shared folder             |
+| GET        | `/share/:id/files/:fileId/download`        | Public download of a shared file           |
+
+
+
 
 ## Deployment
 
@@ -134,6 +154,8 @@ In production, Express trusts Render's proxy (`trust proxy`) so that the session
 - Handling file uploads with Multer and moving storage to the cloud with private buckets and signed URLs
 - Centralised error handling with a custom `HttpError` class and Express 5's async error support
 - Deploying a full-stack app with environment-specific configuration
+
+
 
 ## Author
 
