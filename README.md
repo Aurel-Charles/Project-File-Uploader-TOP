@@ -4,7 +4,7 @@ A stripped-down personal cloud drive, inspired by Google Drive. Users can sign u
 
 Built as part of the [File Uploader project](https://www.theodinproject.com/lessons/nodejs-file-uploader) from **The Odin Project** Full Stack JavaScript curriculum.
 
-**Live demo:** [your-app.onrender.com](https://your-app.onrender.com)
+**Live demo:** [your-app.onrender.com](https://project-file-uploader-top.onrender.com/)
 
 > Hosted on Render's free tier: the server sleeps when idle, so the first visit may take a few seconds to wake it up.
 
