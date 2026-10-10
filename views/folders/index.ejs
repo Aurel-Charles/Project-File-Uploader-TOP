@@ -5,8 +5,12 @@
     <a href="/folders/new"><i data-lucide="folder-plus" aria-hidden="true"></i>New folder</a>
 
     <form action="/files" method="POST" enctype="multipart/form-data">
-      <label for="root-file">Upload to My drive</label>
-      <input type="file" id="root-file" name="file" required>
+      <p class="upload-title">Upload to My drive</p>
+      <label class="file-picker">
+        <input type="file" name="file" title="" required>
+        <i data-lucide="file-up" aria-hidden="true"></i>
+        <span class="file-picker-name">Choose a file</span>
+      </label>
       <button type="submit"><i data-lucide="upload" aria-hidden="true"></i>Upload</button>
     </form>
   </aside>

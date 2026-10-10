@@ -26,3 +26,17 @@ shareBtn.forEach(btn => {
         }
     });
 });
+
+// Sélecteur de fichier : affiche le nom du fichier choisi
+document.querySelectorAll('.file-picker').forEach(picker => {
+    const input = picker.querySelector('input[type="file"]');
+    const label = picker.querySelector('.file-picker-name');
+    const placeholder = label.textContent;
+
+    input.addEventListener('change', () => {
+        const file = input.files[0];
+        label.textContent = file ? file.name : placeholder;
+        picker.title = file ? file.name : '';
+        picker.classList.toggle('has-file', Boolean(file));
+    });
+});
