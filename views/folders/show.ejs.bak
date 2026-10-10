@@ -1,16 +1,6 @@
 <%- include('../partials/header', { title: folder.name }) %>
 
-<div class="toolbar">
-  <div class="toolbar-title">
-    <a href="/folders" class="back-link" aria-label="Back to My drive"><i data-lucide="arrow-left" aria-hidden="true"></i></a>
-    <h1 class="folder-title"><i data-lucide="folder-open" aria-hidden="true"></i><%= folder.name %></h1>
-  </div>
-
-  <form action="/folders/<%= folder.id %>/files" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file" aria-label="File to upload" required>
-    <button type="submit"><i data-lucide="upload" aria-hidden="true"></i>Upload</button>
-  </form>
-</div>
+<h1 class="folder-title"><i data-lucide="folder-open" aria-hidden="true"></i><%= folder.name %></h1>
 
 <% if (locals.errors?.length) { %>
   <ul class="errors">
@@ -22,8 +12,13 @@
 
 <div class="folder-layout">
   <section class="folder-main" aria-label="Files">
+    <form action="/folders/<%= folder.id %>/files" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" required>
+      <button type="submit"><i data-lucide="upload" aria-hidden="true"></i>Upload</button>
+    </form>
+
     <% if (!files.length) { %>
-      <p class="empty">This folder is empty.</p>
+      <p>This folder is empty.</p>
     <% } %>
 
     <ul class="files">
@@ -40,22 +35,24 @@
         </li>
       <% }) %>
     </ul>
+
+    <a href="/folders"><i data-lucide="arrow-left" aria-hidden="true"></i>Back</a>
   </section>
 
   <aside class="share-panel" aria-labelledby="share-title">
     <h2 class="folder-title" id="share-title"><i data-lucide="share-2" aria-hidden="true"></i>Share links</h2>
 
     <form action="/folders/<%= folder.id %>/share" method="POST">
-        <select name="duration" id="duration" aria-label="Link duration">
-            <option value="1">1 day duration link</option>
-            <option value="7">7 days duration link</option>
-            <option value="30">30 days duration link</option>
+        <select name="duration" id="duration">
+            <option value="1">1 day</option>
+            <option value="7">7 days</option>
+            <option value="30">30 days</option>
         </select>
       <button type="submit"><i data-lucide="link" aria-hidden="true"></i>Create share link</button>
     </form>
 
     <% if (!shares.length) { %>
-      <p class="empty">No active share links.</p>
+      <p>No active share links.</p>
     <% } %>
 
     <ul class="shares">

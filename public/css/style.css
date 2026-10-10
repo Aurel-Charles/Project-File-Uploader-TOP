@@ -71,6 +71,8 @@
   --accent-soft: #e8f0fe;
   --danger: #c4372f;
   --danger-soft: #fdecea;
+  --success: #1e8e4e;
+  --success-hover: #18773f;
   --radius: 10px;
   --shadow: 0 1px 2px rgb(16 24 40 / 0.06), 0 1px 3px rgb(16 24 40 / 0.08);
   --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -90,6 +92,8 @@
     --accent-soft: #1f2a44;
     --danger: #f07167;
     --danger-soft: #3a1f1f;
+    --success: #2fa866;
+    --success-hover: #3dbb76;
     --shadow: none;
     color-scheme: dark;
   }
@@ -520,4 +524,382 @@ body > footer {
 }
 @media (prefers-color-scheme: dark) {
   .footer-link img { filter: invert(1); }
+}
+
+/* ---------- Page d'un dossier : fichiers + panneau de partage ---------- */
+
+main:has(.folder-layout) { max-width: 1200px; }
+
+.folder-layout {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.folder-main,
+.share-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.share-panel {
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.share-panel h2 { font-size: 1.1rem; }
+.share-panel > p { color: var(--muted); font-size: 0.9rem; }
+
+.share-panel form[action$="/share"] select { flex: 1; }
+
+/* Dans le panneau étroit, le lien prend toute la largeur
+   et les actions passent en dessous */
+.share-panel .share { padding: 0.75rem; }
+.share-panel .share input { flex-basis: 100%; }
+
+@media (min-width: 900px) {
+  .folder-layout { grid-template-columns: minmax(0, 1fr) 340px; }
+  .share-panel {
+    position: sticky;
+    top: 5rem;
+  }
+}
+
+/* Bouton de copie : passe au vert quand la coche est affichée */
+button[data-share]:has(.lucide-check:not([hidden])) {
+  background: var(--success);
+}
+button[data-share]:has(.lucide-check:not([hidden])):hover {
+  background: var(--success-hover);
+}
+
+/* ==========================================================
+   Mises en page
+   ========================================================== */
+
+.empty {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* ---------- Barre d'outils : titre à gauche, actions à droite ---------- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.toolbar-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.toolbar-title h1 { min-width: 0; }
+
+.toolbar-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: var(--text);
+}
+.back-link:hover {
+  background: var(--surface-2);
+  text-decoration: none;
+}
+
+/* Upload compact dans la barre d'outils (sans la zone en pointillés) */
+.toolbar form[enctype="multipart/form-data"] {
+  padding: 0;
+  border: none;
+  background: none;
+  flex-wrap: nowrap;
+}
+.toolbar form[enctype="multipart/form-data"] input[type="file"] {
+  max-width: 260px;
+}
+
+/* ---------- 1. Accueil du drive : barre latérale + contenu ---------- */
+
+main:has(.drive-layout) { max-width: 1200px; }
+
+.drive-layout {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.drive-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.drive-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.drive-sidebar a[href="/folders/new"] {
+  align-self: stretch;
+  padding-block: 0.65rem;
+}
+
+.drive-sidebar form[enctype="multipart/form-data"] {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0.9rem;
+}
+.drive-sidebar form[enctype="multipart/form-data"] input[type="file"] {
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+@media (min-width: 900px) {
+  .drive-layout { grid-template-columns: 240px minmax(0, 1fr); }
+  .drive-sidebar {
+    position: sticky;
+    top: 5rem;
+  }
+}
+
+/* ---------- 3. Connexion / inscription : carte centrée ---------- */
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.5);
+  box-shadow: var(--shadow);
+}
+
+.auth-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+}
+.auth-logo svg.lucide { width: 1.6rem; height: 1.6rem; }
+
+.auth-card h1 { font-size: 1.6rem; }
+.auth-subtitle { color: var(--muted); margin-top: -0.5rem; }
+.auth-card .errors { max-width: none; }
+
+.auth-card form {
+  display: grid;
+  gap: 0.35rem;
+}
+.auth-card label { display: block; }
+.auth-card form > label:not(:first-child) { margin-top: 0.6rem; }
+.auth-card form button {
+  margin-top: 1.25rem;
+  padding-block: 0.65rem;
+}
+
+.auth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.auth-row label { margin-bottom: 0.35rem; }
+
+@media (max-width: 420px) {
+  .auth-card { padding: 1.5rem; }
+  .auth-row { grid-template-columns: 1fr; }
+}
+
+.auth-switch {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- 4. Page de partage publique ---------- */
+
+.share-banner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+  padding: 1.5rem;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.share-banner-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+}
+.share-banner-icon svg.lucide { width: 1.6rem; height: 1.6rem; }
+
+.share-banner-text {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.share-banner-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+.share-banner h1 { font-size: clamp(1.4rem, 3.5vw, 1.8rem); }
+
+.share-banner-expiry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.share-files {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.share-file {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.25rem 1rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s;
+}
+.share-file:hover { border-color: var(--accent); }
+
+.share-file-icon {
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+.share-file-icon svg.lucide { width: 2rem; height: 2rem; }
+
+.share-file h2 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.share-file p {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.share-file a[href$="/download"] {
+  margin-top: auto;
+  align-self: stretch;
+}
+.share-file p + a[href$="/download"] { margin-top: 0.75rem; }
+
+/* Liste de fichiers vide : on masque le cadre */
+.files:not(:has(li)) { display: none; }
+
+/* ---------- Page d'un fichier : aperçu + détails ---------- */
+
+main:has(.file-layout) { max-width: 1200px; }
+
+.file-layout {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  padding: 1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.file-preview img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.file-preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--muted);
+}
+.file-preview-placeholder svg.lucide { width: 4rem; height: 4rem; }
+
+.file-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.file-panel .file-details { grid-template-columns: max-content 1fr; }
+.file-panel a[href$="/download"] { padding-block: 0.65rem; }
+.file-panel form button { width: 100%; }
+
+@media (min-width: 900px) {
+  .file-layout { grid-template-columns: minmax(0, 1fr) 320px; }
 }

@@ -1,27 +1,44 @@
 <%- include('../partials/header', { title: file.originalName }) %>
 
-<h1 class="folder-title"><i data-lucide="file" aria-hidden="true"></i><%= file.originalName %></h1>
+<% const backUrl = file.folderId ? `/folders/${file.folderId}` : '/folders' %>
 
-<dl class="file-details">
-  <dt>Name</dt>
-  <dd><%= file.originalName %></dd>
+<div class="toolbar">
+  <div class="toolbar-title">
+    <a href="<%= backUrl %>" class="back-link" aria-label="Back"><i data-lucide="arrow-left" aria-hidden="true"></i></a>
+    <h1 class="folder-title"><%= file.originalName %></h1>
+  </div>
+</div>
 
-  <dt>Size</dt>
-  <dd><%= formatSize(file.size) %></dd>
+<div class="file-layout">
+  <section class="file-preview" aria-label="Preview">
+    <% if (previewUrl) { %>
+      <img src="<%= previewUrl %>" alt="Preview of <%= file.originalName %>">
+    <% } else { %>
+      <div class="file-preview-placeholder">
+        <i data-lucide="<%= file.mimeType === 'application/pdf' ? 'file-text' : 'file' %>" aria-hidden="true"></i>
+        <p>No preview available</p>
+      </div>
+    <% } %>
+  </section>
 
-  <dt>Type</dt>
-  <dd><%= file.mimeType %></dd>
+  <aside class="file-panel" aria-label="File details">
+    <dl class="file-details">
+      <dt>Size</dt>
+      <dd><%= formatSize(file.size) %></dd>
 
-  <dt>Uploaded</dt>
-  <dd><%= file.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></dd>
-</dl>
+      <dt>Type</dt>
+      <dd><%= file.mimeType %></dd>
 
-<a href="/files/<%= file.id %>/download"><i data-lucide="download" aria-hidden="true"></i>Download</a>
+      <dt>Uploaded</dt>
+      <dd><%= file.createdAt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) %></dd>
+    </dl>
 
-<form action="/files/<%= file.id %>/delete" method="POST">
-  <button type="submit"><i data-lucide="trash" aria-hidden="true"></i>Delete</button>
-</form>
+    <a href="/files/<%= file.id %>/download"><i data-lucide="download" aria-hidden="true"></i>Download</a>
 
-<a href="<%= file.folderId ? `/folders/${file.folderId}` : '/folders' %>"><i data-lucide="arrow-left" aria-hidden="true"></i>Back</a>
+    <form action="/files/<%= file.id %>/delete" method="POST">
+      <button type="submit"><i data-lucide="trash" aria-hidden="true"></i>Delete file</button>
+    </form>
+  </aside>
+</div>
 
 <%- include('../partials/footer') %>

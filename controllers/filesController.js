@@ -28,11 +28,24 @@ export async function postFiles(req, res,next) {
     res.redirect(folderId ? `/folders/${folderId}` : '/folders');
 }
 
-export async function getFileById(req, res, next) {
-    const file = res.locals.file
-    console.log(file);
-    
-    res.render('files/show', {file})
+export async function getFileById(req, res) {
+    const { file } = res.locals;
+    let previewUrl = null;
+
+    if (file.mimeType.startsWith('image/')) {
+        const { data, error } = await supabase
+            .storage
+            .from(process.env.SUPABASE_BUCKET)
+            .createSignedUrl(file.path, 60 * 60);
+
+        if (error) {
+            console.error(error);
+        } else {
+            previewUrl = data.signedUrl;
+        }
+    }
+
+    res.render('files/show', { file, previewUrl });
 }
 
 export async function getDownload(req, res, next) {
